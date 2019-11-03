@@ -1,13 +1,12 @@
-VivienneVMM
-===========
+# VivienneVMM
 
 VivienneVMM is a stealthy debugging framework implemented via an Intel VT-x hypervisor. The driver exposes a hardware breakpoint control interface which allows a user mode client to set and clear breakpoints. These breakpoints are invisible to the guest.
 
 This project is an extension of the [HyperPlatform](https://github.com/tandasat/HyperPlatform) framework by [tandasat](https://github.com/tandasat).
 
 
-Projects
---------
+## Projects
+
 
 ### VivienneVMM
 The core driver project containing the Vivienne Virtual Machine Monitor.
@@ -19,8 +18,8 @@ A command line VivienneVMM client which makes use of the hardware breakpoint con
 VivienneVMM test cases.
 
 
-Implementation
---------------
+## Implementation
+
 
 ### Breakpoint Manager
 The breakpoint manager (BPM) modifies processor debug registers to install and uninstall hardware breakpoints. Each modification is performed synchronously on all logical processors using the following protocol:
@@ -38,8 +37,8 @@ Users can customize breakpoint behavior by registering a callback during breakpo
 The debug register facade prevents the guest from accessing processor debug registers via a MovDr VM exit handler. This handler emulates debug register access instructions using a set of processor-specific, 'fake' debug registers.
 
 
-Capture Execution Context
--------------------------
+## Capture Execution Context
+
 
 The capture execution context (CEC) module implements two breakpoint callbacks: capture execution context register (CECR) and capture execution context memory (CECM).
 
@@ -184,14 +183,14 @@ for (ULONG i = 0; i < pValuesCtx->NumberOfValues; ++i)
 See the CECM command description in the VivienneCL README for more information.
 
 
-Limitations
------------
+## Limitations
+
 
 When the debug register facade is active, hardware breakpoints installed by the guest (into the fake debug registers) cannot be triggered. A process can detect this side effect by installing a breakpoint, triggering the breakpoint condition, and then waiting for a single-step exception that will never be delivered.
 
 
-EPT Hooking Comparison
-----------------------
+## EPT Hooking Comparison
+
 
 EPT hooking is a viable alternative for implementing stealth debugging which does not have the limitation(s) described above. The trade-offs are:
 
@@ -200,8 +199,8 @@ EPT hooking is a viable alternative for implementing stealth debugging which doe
 * The target machine must use a processor that supports EPT.
 
 
-Project Structure
------------------
+## Project Structure
+
 
 This project uses [HyperPlatform](https://github.com/tandasat/HyperPlatform) as a git subtree with prefix='VivienneVMM/HyperPlatform'. We subtree the project instead of using a git submodule because we must modify HyperPlatform files to implement VivienneVMM features. This allows us to merge HyperPlatform updates from upstream with minimal merge conflicts.
 
@@ -219,17 +218,24 @@ The following list of console commands are an example of how to pull HyperPlatfo
     git subtree pull --prefix=VivienneVMM/HyperPlatform upstream master
 
 
-Related Project(s)
-------------------
+## Related Projects
 
-* HyperPlatform
-* https://github.com/tandasat/HyperPlatform
+
+### HyperPlatform
+
+https://github.com/tandasat/HyperPlatform
 
 HyperPlatform is an Intel VT-x based hypervisor (a.k.a. virtual machine monitor) aiming to provide a thin platform for research on Windows. HyperPlatform is capable of monitoring a wide range of events, including but not limited to, access to virtual/physical memory and system registers, occurrences of interrupts and execution of certain instructions.
 
+### PareidoliaTriggerbot
 
-Notes
------
+https://github.com/changeofpace/PareidoliaTriggerbot
+
+PareidoliaTriggerbot is a hypervisor-based, external Widowmaker triggerbot which uses the VivienneVMM and MouClassInputInjection projects to bypass the Overwatch Anti-Cheat.
+
+
+## Notes
+
 
 * This project was developed and tested on Windows 7 x64 SP1.
 * All binaries are PatchGuard safe on Windows 7.
